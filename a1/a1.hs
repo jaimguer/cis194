@@ -7,15 +7,25 @@ toDigitsRev :: Integer -> [Integer]
 toDigitsRev = reverse . toDigits
 
 doubleEveryOther :: [Integer] -> [Integer]
-doubleEveryOther = reverse . doubleFromLeft . reverse
+doubleEveryOther ls 
+    | even $ length ls = double ls
+    | otherwise        = skip ls
     where
-    doubleFromLeft :: [Integer] -> [Integer]
-    doubleFromLeft []       = []
-    doubleFromLeft [x]      = [2 * x]
-    doubleFromLeft (x:y:xs) = x : (2 * y) : doubleFromLeft xs
+    double :: [Integer] -> [Integer]
+    double []     = []
+    double (x:xs) = (2*x) : skip xs
+    skip :: [Integer] -> [Integer]
+    skip []       = []
+    skip (x:xs)   = x : double xs
 
 sumDigits :: [Integer] -> Integer
 sumDigits ls = sum $ concat $ map toDigits ls
 
 validate :: Integer -> Bool
 validate n = (sumDigits . doubleEveryOther . toDigits) n `mod` 10 == 0
+
+type Peg = String
+type Move = (Peg, Peg)
+
+hanoi :: Integer -> Peg -> Peg -> Peg -> [Move]
+
